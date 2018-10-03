@@ -20,7 +20,7 @@ import com.github.richygreat.test.springbootsonar.config.SuccessConfig;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = SuccessConfig.class, initializers = ConfigFileApplicationContextInitializer.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestServiceLayer {
+public class ServiceLayerTest {
 	@Autowired
 	private FooService fooService;
 
