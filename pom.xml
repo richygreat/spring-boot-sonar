@@ -36,50 +36,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.github.richygreat</groupId>
+			<artifactId>jacoco-listener</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
-
-	<profiles>
-		<profile>
-			<!-- calculate coverage metrics per test with SonarQube and JaCoCo -->
-			<id>coverage-per-test</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.13</version>
-						<configuration>
-							<!-- same configuration as in the regular test execution goal -->
-							<!-- plus argLine parameter configured by JaCoCo prepare-agent -->
-							<argLine>${argLine} -XX:-UseSplitVerifier</argLine>
-							<includes>
-								<include>**/*Test.java</include>
-								<include>**/*Tests.java</include>
-							</includes>
-							<excludes>
-								<exclude>**/it/*IT.java</exclude>
-							</excludes>
-							<!-- new configuration needed for coverage per test -->
-							<properties>
-								<property>
-									<name>listener</name>
-									<value>org.sonar.java.jacoco.JUnitListener</value>
-								</property>
-							</properties>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-			<dependencies>
-				<dependency>
-					<groupId>org.codehaus.sonar-plugins.java</groupId>
-					<artifactId>sonar-jacoco-listeners</artifactId>
-					<version>2.3</version>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
 
 	<build>
 		<plugins>
@@ -90,17 +52,33 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.13</version>
 				<configuration>
-					<argLine>-XX:-UseSplitVerifier</argLine>
-					<includes>
-						<include>**/*Test.java</include>
-						<include>**/*Tests.java</include>
-					</includes>
-					<excludes>
-						<exclude>**/it/*IT.java</exclude>
-					</excludes>
+					<properties>
+						<property>
+							<name>listener</name>
+							<value>com.github.richygreat.jacocolistener.JUnitListener</value>
+						</property>
+					</properties>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.7.201606060606</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
